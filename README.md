@@ -18,6 +18,16 @@ npm install
 npm run build
 ```
 
+## 部署
+
+课程网站通过 `gh-pages` 分支发布。GitHub Pages 设置建议：
+
+```text
+Source: Deploy from a branch
+Branch: gh-pages
+Folder: / (root)
+```
+
 ## 公开范围
 
 公开仓库只包含课程网站、教学计划、公开讲义和必要模板文件。`Ref/` 中的备课参考文献、书籍和 PPT 不提交到 GitHub。

@@ -38,8 +38,8 @@ Using SSH:
 USE_SSH=true npm run deploy
 ```
 
-首次部署前需要先在 GitHub 创建空仓库：
+仓库设置中使用 `gh-pages` 分支发布：
 
 ```text
-Jason-S-Liu/FM_tutorials
+Settings -> Pages -> Deploy from a branch -> gh-pages / root
 ```
