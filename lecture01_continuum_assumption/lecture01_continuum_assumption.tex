@@ -1,0 +1,451 @@
+\documentclass[UTF8,10pt,aspectratio=169,xcolor={dvipsnames}]{ctexbeamer}
+
+% Load the Blei theme from the sibling template folder.
+\makeatletter
+\IfFileExists{beamerthemeblei.sty}{%
+  \usetheme{blei}%
+}{%
+  \input{../beamerthemeblei-main/beamerthemeblei.sty}%
+}
+\makeatother
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathmorphing,decorations.pathreplacing,patterns}
+
+\sisetup{detect-all}
+
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\Dt}{\mathrm{D}}
+\newcommand{\uvec}{\boldsymbol{u}}
+\newcommand{\xvec}{\boldsymbol{x}}
+\newcommand{\grad}{\boldsymbol{\nabla}}
+\newcommand{\Rey}{\mathrm{Re}}
+\newcommand{\Kn}{\mathrm{Kn}}
+\newcommand{\Ma}{\mathrm{Ma}}
+
+\title{连续性假设与流体基本描述}
+\subtitle{流体力学（1）｜第一节实质课程}
+\author{重庆大学土木工程学院}
+\date{2026 年秋季学期}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{本讲要回答的问题}
+\begin{itemize}
+\widesep
+\item 流体明明由分子组成，为什么可以写成连续的密度场、速度场和压力场？
+\item “流体质点”到底有多大？它和分子、控制体有什么区别？
+\item 连续性假设什么时候可靠，什么时候会失效？
+\item 对土木工程中的水流、管流、建筑绕流，这个假设意味着什么？
+\end{itemize}
+\end{frame}
+
+\begin{frame}{从离散分子到连续介质}
+\begin{columns}[T]
+\begin{column}{.52\textwidth}
+\begin{itemize}
+\widesep
+\item 微观上：流体由大量分子组成，局部量有强烈涨落。
+\item 宏观上：工程关心的是平均速度、压力、密度、剪切应力。
+\item 连续性假设的核心：在足够小的体积内仍含有足够多分子，平均量随空间平滑变化。
+\end{itemize}
+\end{column}
+\begin{column}{.43\textwidth}
+\centering
+\begin{tikzpicture}[scale=.9]
+  \draw[rounded corners, thick] (0,0) rectangle (5,3.2);
+  \foreach \i in {1,...,55}{
+    \pgfmathsetmacro{\x}{0.25+4.5*rnd}
+    \pgfmathsetmacro{\y}{0.25+2.7*rnd}
+    \fill[black!45] (\x,\y) circle (0.028);
+  }
+  \draw[thick, fill=gray!8] (2.5,1.6) circle (.75);
+  \node at (2.5,1.6) {\small 平均体积};
+  \draw[-{Latex[length=2mm]}, thick] (3.25,1.6) -- (4.65,2.35);
+  \node[align=center] at (4.55,2.65) {\small 连续场值\\[-1mm]\small $\rho,\uvec,p$};
+  \node[anchor=west] at (0.05,-.35) {\small 分子尺度};
+  \node[anchor=east] at (5,-.35) {\small 工程尺度};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{流体质点：不是分子，也不是整个流场}
+\greybox{
+\[
+\text{分子尺度} \ll \text{流体质点尺度} \ll \text{流动特征尺度}
+\]
+}
+\vspace{.3cm}
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+\begin{itemize}
+\item 足够大：包含大量分子，平均量稳定。
+\item 足够小：相对于流动长度尺度可视为一个点。
+\item 可以随流体运动，并携带局部物理量。
+\end{itemize}
+\end{column}
+\begin{column}{.48\textwidth}
+\begin{tikzpicture}[scale=.86]
+  \draw[-{Latex[length=2mm]}, thick] (0,0) -- (6.6,0);
+  \foreach \x/\lab in {0.6/分子,3.2/流体质点,6.0/结构或管道}{
+    \draw[thick] (\x,-.08) -- (\x,.08);
+    \node[below] at (\x,-.08) {\small \lab};
+  }
+  \draw[decorate,decoration={brace,amplitude=5pt}] (.55,.35) -- (3.2,.35)
+    node[midway,above=6pt] {\scriptsize 平均足够稳定};
+  \draw[decorate,decoration={brace,amplitude=5pt}] (3.2,.85) -- (6.0,.85)
+    node[midway,above=6pt] {\scriptsize 仍可视为局部点};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{连续性假设的判据：Knudsen 数}
+\greybox{
+\[
+\Kn=\frac{\lambda}{L}
+\]
+}
+\begin{itemize}
+\widesep
+\item $\lambda$：分子平均自由程，描述分子碰撞前的典型运动距离。
+\item $L$：流动或几何特征尺度，例如管径、边界层厚度、建筑尺寸。
+\item $\Kn \ll 1$ 时，分子尺度远小于工程尺度，连续介质模型通常可靠。
+\end{itemize}
+\vspace{.2cm}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+范围 & 常见描述 & 建模方式 \\
+\midrule
+$\Kn < 10^{-3}$ & 连续流 & NS 方程通常适用 \\
+$10^{-3}\sim10^{-1}$ & 滑移/过渡影响出现 & 边界条件需谨慎 \\
+$\Kn > 10^{-1}$ & 稀薄效应明显 & 连续介质假设可能失效 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}{土木工程尺度下通常很安全}
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+\begin{itemize}
+\widesep
+\item 常温常压空气的分子平均自由程约为几十纳米量级。
+\item 水中分子间尺度更小，常规水力问题更接近连续介质。
+\item 管径、建筑尺度、河道尺度通常远大于分子尺度。
+\end{itemize}
+\end{column}
+\begin{column}{.48\textwidth}
+\begin{tabular}{lll}
+\toprule
+问题 & 取 $L$ & 量级判断 \\
+\midrule
+建筑绕流 & \SI{10}{m} & $\Kn \sim 10^{-8}$ \\
+通风管道 & \SI{0.1}{m} & $\Kn \sim 10^{-6}$ \\
+微通道空气流 & \SI{1}{\micro m} & $\Kn \sim 10^{-2}$ \\
+\bottomrule
+\end{tabular}
+\vspace{.55cm}
+
+\greybox[.92\textwidth]{
+\centering
+常规土木流动：连续性假设通常成立。\\
+微尺度、低压、稀薄气体：需要重新判断。
+}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{连续介质下，流动被描述为“场”}
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+\greybox{
+\[
+\rho=\rho(\xvec,t),\qquad \uvec=\uvec(\xvec,t),\qquad p=p(\xvec,t)
+\]
+}
+\begin{itemize}
+\item $\rho$：密度场
+\item $\uvec=(u,v,w)$：速度场
+\item $p$：压力场
+\item $T,\mu,\tau$ 等量也可写为场
+\end{itemize}
+\end{column}
+\begin{column}{.48\textwidth}
+\centering
+\begin{tikzpicture}[scale=.82]
+  \draw[step=1, gray!20, very thin] (0,0) grid (5,3);
+  \foreach \x in {.6,1.6,2.6,3.6,4.6}{
+    \foreach \y in {.55,1.55,2.55}{
+      \pgfmathsetmacro{\ang}{15+18*\x-9*\y}
+      \draw[-{Latex[length=1.5mm]}, thick] (\x,\y) -- ++(\ang:.38);
+    }
+  }
+  \node[anchor=west] at (.2,3.35) {\small $\uvec(\xvec,t)$};
+  \fill[black] (2.6,1.55) circle (.04);
+  \node[anchor=west] at (2.75,1.55) {\small 局部场值};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{密度：一个局部平均量}
+\greybox{
+\[
+\rho(\xvec,t)=\lim_{\Delta V\rightarrow \delta V}
+\frac{\Delta m}{\Delta V}
+\]
+}
+\begin{itemize}
+\widesep
+\item 这里的 $\delta V$ 不是数学上的零体积，而是连续介质意义下的最小平均体积。
+\item 若 $\Delta V$ 太小，分子涨落显著，密度不稳定。
+\item 若 $\Delta V$ 太大，平均会抹掉真实的空间变化。
+\end{itemize}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[-{Latex[length=2mm]}] (0,0) -- (7,0) node[right] {\small 平均体积 $\Delta V$};
+  \draw[-{Latex[length=2mm]}] (0,0) -- (0,2.6) node[above] {\small $\Delta m/\Delta V$};
+  \draw[thick, smooth] plot coordinates {(0.25,1.95) (.55,.7) (.85,2.15) (1.15,.9) (1.45,1.5) (1.9,1.42) (2.4,1.43) (3.3,1.43) (4.2,1.38) (5.1,1.25) (6.3,1.05)};
+  \draw[fill=gray!10,draw=none] (1.75,0) rectangle (4.1,2.5);
+  \node at (2.95,2.25) {\small 连续介质窗口};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{速度场：Euler 描述与 Lagrange 描述}
+\begin{columns}[T]
+\begin{column}{.49\textwidth}
+\textbf{Euler 描述}
+\[
+\uvec=\uvec(\xvec,t)
+\]
+\begin{itemize}
+\item 固定空间位置，看流体经过。
+\item 适合写控制方程和边界条件。
+\item CFD 和实验测量常采用这种视角。
+\end{itemize}
+\end{column}
+\begin{column}{.49\textwidth}
+\textbf{Lagrange 描述}
+\[
+\xvec=\xvec(\xvec_0,t)
+\]
+\begin{itemize}
+\item 跟随某个流体质点运动。
+\item 适合理解质点轨迹和物质导数。
+\item 颗粒追踪、示踪实验常采用这种视角。
+\end{itemize}
+\end{column}
+\end{columns}
+\vspace{.25cm}
+\greybox{
+\[
+\frac{\Dt(\cdot)}{\Dt t}
+=\frac{\partial(\cdot)}{\partial t}+\uvec\cdot\grad(\cdot)
+\]
+}
+\end{frame}
+
+\begin{frame}{不可压缩：不是“压力不能变”}
+\begin{itemize}
+\widesep
+\item 不可压缩的核心是流体质点密度不随运动显著变化：
+\[
+\frac{\Dt \rho}{\Dt t}=0
+\]
+\item 结合质量守恒，可得到常用条件：
+\[
+\grad\cdot\uvec=0
+\]
+\item 液体常常可近似不可压缩；低速气体在 $\Ma<0.3$ 时也常作不可压缩处理。
+\end{itemize}
+\greybox{
+不可压缩流中，压力仍然可以在空间中变化；压力常用于保证速度场满足质量守恒。
+}
+\end{frame}
+
+\begin{frame}{压力：单位面积上的法向作用}
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+\greybox{
+\[
+p=\lim_{\Delta A\rightarrow 0}\frac{\Delta F_n}{\Delta A}
+\]
+}
+\begin{itemize}
+\item 静止流体中，压力在一点处各方向相同。
+\item 运动流体中，还会出现黏性剪切应力。
+\item 管道、建筑表面风压、孔口出流都离不开压力分布。
+\end{itemize}
+\end{column}
+\begin{column}{.48\textwidth}
+\centering
+\begin{tikzpicture}[scale=.9]
+  \draw[thick, fill=gray!8] (0,0) rectangle (4,2.5);
+  \draw[thick] (2,1.25) circle (.45);
+  \foreach \a in {0,45,...,315}{
+    \draw[-{Latex[length=1.6mm]}, thick] ($(2,1.25)+(\a:.9)$) -- ($(2,1.25)+(\a:.5)$);
+  }
+  \node at (2,1.25) {\small 点};
+  \node at (2,-.45) {\small 静止流体：各向压力相同};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{黏性：速度梯度产生剪切应力}
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+\greybox{
+\[
+\tau=\mu \frac{\dd u}{\dd y}
+\]
+}
+\begin{itemize}
+\widesep
+\item $\mu$ 是动力黏度。
+\item 牛顿流体中，剪切应力与剪切速率成正比。
+\item 黏性是边界层、管道摩阻、尾流耗散的根源。
+\end{itemize}
+\end{column}
+\begin{column}{.48\textwidth}
+\centering
+\begin{tikzpicture}[scale=.9]
+  \draw[very thick] (0,0) -- (4.6,0);
+  \draw[very thick] (0,2.4) -- (4.6,2.4);
+  \draw[-{Latex[length=2mm]}, thick] (.3,2.65) -- (1.5,2.65) node[midway,above] {\small $U$};
+  \foreach \y/\len in {.35/.55,.8/1.0,1.25/1.45,1.7/1.9,2.15/2.35}{
+    \draw[-{Latex[length=1.6mm]}, thick] (.55,\y) -- ++(\len,0);
+  }
+  \draw[-{Latex[length=1.8mm]}] (4.95,0) -- (4.95,2.4) node[midway,right] {\small $y$};
+  \node at (2.3,-.35) {\small 固壁：$u=0$};
+  \node at (2.35,2.95) {\small 移动板：$u=U$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{牛顿流体与非牛顿流体}
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+\begin{itemize}
+\widesep
+\item 水、空气通常可按牛顿流体处理。
+\item 泥浆、聚合物溶液、浆体可能表现为非牛顿流体。
+\item 本课程主线主要基于牛顿流体。
+\end{itemize}
+\end{column}
+\begin{column}{.48\textwidth}
+\centering
+\begin{tikzpicture}[scale=.9]
+  \draw[-{Latex[length=2mm]}] (0,0) -- (4.6,0) node[right] {\small $\dd u/\dd y$};
+  \draw[-{Latex[length=2mm]}] (0,0) -- (0,3) node[above] {\small $\tau$};
+  \draw[thick] (0,0) -- (4,2.5) node[right] {\small 牛顿流体};
+  \draw[thick, dashed] plot[smooth] coordinates {(0,0) (.8,.25) (1.7,.75) (2.8,1.65) (4,2.85)}
+    node[right] {\small 剪切增稠};
+  \draw[thick, dotted] plot[smooth] coordinates {(0,0) (.7,.85) (1.6,1.45) (2.8,2.0) (4,2.35)}
+    node[right] {\small 剪切变稀};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{无滑移边界条件}
+\greybox{
+\[
+\uvec_{\text{fluid at wall}}=\uvec_{\text{wall}}
+\]
+}
+\begin{itemize}
+\widesep
+\item 固体壁面处，流体速度与壁面速度相同。
+\item 对静止壁面：壁面上的流体速度为零。
+\item 管道压降、边界层生成、壁面剪切力都从无滑移开始。
+\item 在稀薄气体或微尺度流动中，无滑移可能需要修正为滑移边界。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{连续性假设失效的典型场景}
+\begin{columns}[T]
+\begin{column}{.5\textwidth}
+\begin{itemize}
+\widesep
+\item 高空低压稀薄气体。
+\item 微/纳米通道内的气体流动。
+\item 激波附近的强非平衡区域。
+\item 分子尺度界面、蒸发/凝结前沿。
+\end{itemize}
+\end{column}
+\begin{column}{.45\textwidth}
+\greybox{
+\centering
+失效的本质不是“公式不好用”，\\[1mm]
+而是局部平均不再能代表平滑场。
+}
+\vspace{.45cm}
+\begin{tikzpicture}[scale=.85]
+  \draw[-{Latex[length=2mm]}, thick] (0,0) -- (5,0);
+  \node[below] at (0,0) {\small 分子};
+  \node[below] at (2.5,0) {\small 过渡};
+  \node[below] at (5,0) {\small 连续};
+  \draw[very thick] (.2,.45) -- (1.3,.45);
+  \draw[very thick] (1.6,.45) -- (3.1,.45);
+  \draw[very thick] (3.4,.45) -- (4.8,.45);
+  \node[above] at (.75,.45) {\small 大 $\Kn$};
+  \node[above] at (4.1,.45) {\small 小 $\Kn$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{课堂练习：判断连续性假设}
+取常温常压空气的平均自由程 $\lambda\approx \SI{65}{nm}$，估算下列情形的 $\Kn=\lambda/L$。
+
+\vspace{.25cm}
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+情形 & 特征尺度 $L$ & $\Kn$ 量级 & 判断 \\
+\midrule
+建筑绕流 & \SI{10}{m} & \phantom{$10^{-8}$} & \phantom{连续} \\
+通风支管 & \SI{0.1}{m} & \phantom{$10^{-6}$} & \phantom{连续} \\
+微通道气体流 & \SI{1}{\micro m} & \phantom{$10^{-2}$} & \phantom{需谨慎} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{.3cm}
+\greybox{
+思考：为什么同样是空气，建筑绕流可以放心使用连续介质模型，而微通道流动需要谨慎？
+}
+\end{frame}
+
+\begin{frame}{本讲小结}
+\begin{itemize}
+\widesep
+\item 连续性假设把离散分子系统转化为连续场问题，是后续方程推导的前提。
+\item 流体质点满足尺度分离：比分子大得多，比工程尺度小得多。
+\item Knudsen 数 $\Kn=\lambda/L$ 是判断连续性假设的重要量纲一参数。
+\item 连续介质下，流动可由 $\rho(\xvec,t)$、$\uvec(\xvec,t)$、$p(\xvec,t)$ 等场变量描述。
+\item 黏性、压力、无滑移边界条件将直接引出 NS 方程、管道流和边界层。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{课后任务}
+\begin{enumerate}
+\widesep
+\item 复习本讲的三个核心概念：流体质点、Knudsen 数、场变量。
+\item 选一个土木工程中的流动问题，写出合理的特征尺度 $L$，并判断连续性假设是否成立。
+\item 预习：控制体、质量守恒、连续性方程。
+\end{enumerate}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,46 @@
+# Local reference and preparation materials
+Ref/
+3161e6404ce0c1c2ece2896582958283.jpg
+课程表.jpg
+
+# Docusaurus dependencies and generated output
+course-site/node_modules/
+course-site/build/
+course-site/.docusaurus/
+course-site/.cache-loader/
+
+# Docusaurus starter examples kept locally but not published
+course-site/blog/
+course-site/docs/intro.mdx
+course-site/docs/tutorial-basics/
+course-site/docs/tutorial-extras/
+course-site/src/components/HomepageFeatures/
+course-site/static/img/docusaurus-social-card.jpg
+course-site/static/img/docusaurus.png
+course-site/static/img/logo.svg
+course-site/static/img/undraw_docusaurus_mountain.svg
+course-site/static/img/undraw_docusaurus_react.svg
+course-site/static/img/undraw_docusaurus_tree.svg
+beamerthemeblei-main/example.pdf
+
+# LaTeX generated files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.run.xml
+*.snm
+*.toc
+*.xdv
+*.synctex.gz
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

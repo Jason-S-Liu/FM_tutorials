@@ -1,0 +1,45 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #0b6fb3;
+  --ifm-color-primary-dark: #0a64a1;
+  --ifm-color-primary-darker: #095e98;
+  --ifm-color-primary-darkest: #084e7d;
+  --ifm-color-primary-light: #0c7bc5;
+  --ifm-color-primary-lighter: #0d82d0;
+  --ifm-color-primary-lightest: #2494dd;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #58b7ee;
+  --ifm-color-primary-dark: #38a9eb;
+  --ifm-color-primary-darker: #28a1e9;
+  --ifm-color-primary-darkest: #1585c6;
+  --ifm-color-primary-light: #78c5f1;
+  --ifm-color-primary-lighter: #88cdf3;
+  --ifm-color-primary-lightest: #b8e0f8;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.theme-doc-markdown table {
+  display: table;
+  width: 100%;
+  font-size: 0.92rem;
+}
+
+.theme-doc-markdown th,
+.theme-doc-markdown td {
+  vertical-align: top;
+}

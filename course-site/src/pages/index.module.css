@@ -1,0 +1,172 @@
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background:
+    linear-gradient(90deg, rgba(13, 65, 120, 0.88), rgba(6, 33, 62, 0.78)),
+    url('../../static/img/course-schedule.jpg') center 33% / cover no-repeat;
+  color: #fff;
+}
+
+.heroInner {
+  max-width: 1120px;
+  min-height: 420px;
+  margin: 0 auto;
+  padding: 72px 24px 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.kicker {
+  margin: 0 0 16px;
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.title {
+  margin: 0;
+  font-size: 3.7rem;
+  color: #fff;
+}
+
+.subtitle {
+  max-width: 760px;
+  margin: 20px 0 0;
+  font-size: 1.22rem;
+  line-height: 1.75;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px 24px 72px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fact {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 6px;
+  padding: 16px;
+  background: var(--ifm-background-surface-color);
+}
+
+.fact span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.9rem;
+}
+
+.fact strong {
+  font-size: 1.08rem;
+}
+
+.section {
+  margin-top: 48px;
+}
+
+.sectionHeader {
+  max-width: 860px;
+}
+
+.sectionHeader p {
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.75;
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.module {
+  border-left: 4px solid var(--ifm-color-primary);
+  padding: 14px 16px;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.module h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.module p {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.65;
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 48px;
+  padding: 28px;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.band p {
+  max-width: 780px;
+  margin-bottom: 0;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.75;
+}
+
+@media screen and (max-width: 996px) {
+  .heroInner {
+    min-height: 360px;
+    padding: 56px 20px 72px;
+  }
+
+  .title {
+    font-size: 2.45rem;
+  }
+
+  .subtitle {
+    font-size: 1.06rem;
+  }
+
+  .infoGrid,
+  .moduleGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .band {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
