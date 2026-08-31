@@ -2,7 +2,7 @@
 
 ## 文件
 
-- `lecture01_continuum_assumption.tex`：Beamer 源码，使用 `../beamerthemeblei-main/beamerthemeblei.sty` 模板。
+- `lecture01_continuum_assumption.tex`：Beamer 源码，采用 `Ref/liutiwowen` 参考 PDF 的 4:3 默认 Beamer 风格。
 - `build_windows.ps1`：Windows PowerShell 编译脚本。
 
 ## Windows 编译
@@ -20,4 +20,3 @@ powershell -ExecutionPolicy Bypass -File .\build_windows.ps1
 ```
 
 脚本会优先使用 `latexmk -xelatex`；如果没有 `latexmk`，则自动调用两次 `xelatex`。
-

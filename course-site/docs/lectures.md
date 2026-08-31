@@ -11,7 +11,7 @@ slug: /lectures
 | 课次 | 主题 | 材料 |
 |---:|---|---|
 | 1 | 认识同学；课程组织和学习方式说明 | 不设置课程知识内容 |
-| 2 | 连续性假设：流体质点、连续介质、密度场、速度场、不可压缩条件 | [PDF 下载](pathname:///FM_tutorials/files/lecture01_continuum_assumption.pdf) / [PPTX 下载](pathname:///FM_tutorials/files/lecture01_continuum_assumption.pptx) |
+| 2 | 连续性假设：流体质点、连续介质、密度场、速度场、不可压缩条件 | [PDF 下载](pathname:///FM_tutorials/files/lecture01_continuum_assumption.pdf) |
 
 ## 后续主题
 

@@ -1,451 +1,633 @@
-\documentclass[UTF8,10pt,aspectratio=169,xcolor={dvipsnames}]{ctexbeamer}
+\documentclass[UTF8,9pt]{ctexbeamer}
 
-% Load the Blei theme from the sibling template folder.
-\makeatletter
-\IfFileExists{beamerthemeblei.sty}{%
-  \usetheme{blei}%
-}{%
-  \input{../beamerthemeblei-main/beamerthemeblei.sty}%
-}
-\makeatother
+% "流体我闻" style adaptation:
+% 4:3 default Beamer, compact white pages, formula-first explanations,
+% colored formula annotations, dense but stable minipage/tabular layouts.
 
+\usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{epstopdf,epsfig}
+\usepackage{tabularx}
 \usepackage{booktabs}
-\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{multicol}
+\usefonttheme{professionalfonts}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{mathtools,physics,cancel,array,ulem,longtable,ragged2e,mathrsfs,extarrows,bm}
+\usepackage{pifont,bbding}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathmorphing,decorations.pathreplacing,patterns}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing}
 
-\sisetup{detect-all}
+\usetheme{default}
+\usecolortheme{default}
+\useinnertheme{default}
+\setbeamercolor{structure}{fg=blue!70!black}
+\setbeamercolor{frametitle}{fg=blue!70!black}
+\setbeamercolor{title}{fg=blue!70!black}
+\setbeamercolor{subtitle}{fg=blue!70!black}
+\setbeamercolor{alerted text}{fg=red}
+\setbeamerfont{title}{size=\large,series=\mdseries}
+\setbeamerfont{subtitle}{size=\large,series=\mdseries}
+\setbeamerfont{frametitle}{size=\large,series=\mdseries}
+\setbeamerfont{section in toc}{size=\small,series=\mdseries}
+\setbeamerfont{subsection in toc}{size=\footnotesize,series=\mdseries}
+\setbeamersize{text margin left=1.2em,text margin right=1.2em}
 
-\newcommand{\dd}{\,\mathrm{d}}
+\hypersetup{colorlinks=false,pdftitle={Fluid Mechanics: Continuum}}
+
+\renewcommand{\dd}{\,\mathrm{d}}
 \newcommand{\Dt}{\mathrm{D}}
-\newcommand{\uvec}{\boldsymbol{u}}
-\newcommand{\xvec}{\boldsymbol{x}}
-\newcommand{\grad}{\boldsymbol{\nabla}}
-\newcommand{\Rey}{\mathrm{Re}}
+\newcommand{\uvec}{\bm{u}}
+\newcommand{\xvec}{\bm{x}}
+\renewcommand{\grad}{\bm{\nabla}}
 \newcommand{\Kn}{\mathrm{Kn}}
 \newcommand{\Ma}{\mathrm{Ma}}
+\newcommand{\cyan}[1]{{\color{cyan}#1}}
+\newcommand{\teal}[1]{{\color{teal}#1}}
+\newcommand{\olive}[1]{{\color{olive}#1}}
+\newcommand{\purple}[1]{{\color{purple}#1}}
+\newcommand{\red}[1]{{\color{red}#1}}
+\newcommand{\graytxt}[1]{{\color{gray}#1}}
+\newcommand{\btri}{\textcolor{blue!75!black}{$\blacktriangleright$}}
+\newcommand{\toclink}[2]{\hyperlink{#1}{#2}}
+\newcommand{\rev}{\delta\mathscr{V}}
+\newcommand{\vol}{\mathscr{V}}
 
-\title{连续性假设与流体基本描述}
-\subtitle{流体力学（1）｜第一节实质课程}
 \author{重庆大学土木工程学院}
+\title{Fluid Mechanics:\\[3pt]Continuum}
+\subtitle{连续性假设与流体基本描述}
 \date{2026 年秋季学期}
 
 \begin{document}
 
-\maketitle
-
-\begin{frame}{本讲要回答的问题}
-\begin{itemize}
-\widesep
-\item 流体明明由分子组成，为什么可以写成连续的密度场、速度场和压力场？
-\item “流体质点”到底有多大？它和分子、控制体有什么区别？
-\item 连续性假设什么时候可靠，什么时候会失效？
-\item 对土木工程中的水流、管流、建筑绕流，这个假设意味着什么？
-\end{itemize}
+\begin{frame}
+\titlepage
 \end{frame}
 
-\begin{frame}{从离散分子到连续介质}
-\begin{columns}[T]
-\begin{column}{.52\textwidth}
-\begin{itemize}
-\widesep
-\item 微观上：流体由大量分子组成，局部量有强烈涨落。
-\item 宏观上：工程关心的是平均速度、压力、密度、剪切应力。
-\item 连续性假设的核心：在足够小的体积内仍含有足够多分子，平均量随空间平滑变化。
-\end{itemize}
-\end{column}
-\begin{column}{.43\textwidth}
+\begin{frame}{Contents}
+\footnotesize
+\begin{multicols}{2}
+\toclink{molecule}{\textcolor{blue!70!black}{continuum assumption}}
+
+\hspace{.25cm}\toclink{molecule}{molecule vs. field}
+
+\hspace{.25cm}\toclink{rev}{representative volume}
+
+\hspace{.25cm}\toclink{kn}{Knudsen number}
+
+\vspace{.24cm}
+\toclink{density}{\textcolor{blue!70!black}{fluid variables}}
+
+\hspace{.25cm}\toclink{density}{density}
+
+\hspace{.25cm}\toclink{velocity}{velocity}
+
+\hspace{.25cm}\toclink{pressure}{pressure}
+
+\hspace{.25cm}\toclink{viscosity}{viscosity}
+
+\vspace{.24cm}
+\toclink{material}{\textcolor{blue!70!black}{descriptions and equations}}
+
+\hspace{.25cm}\toclink{material}{material derivative}
+
+\hspace{.25cm}\toclink{incompressible}{incompressibility}
+
+\hspace{.25cm}\toclink{noslip}{boundary conditions}
+
+\vspace{.24cm}
+\toclink{failure}{\textcolor{blue!70!black}{limits and practice}}
+
+\hspace{.25cm}\toclink{failure}{continuum failure}
+
+\hspace{.25cm}\toclink{practice}{estimation}
+\end{multicols}
+\end{frame}
+
+\section{continuum assumption}
+\subsection{molecule vs. field}
+
+\begin{frame}[label=molecule]{molecules $\Longrightarrow$ continuum field}
+\[
+\boxed{\quad
+\rho=\rho(\xvec,t),\qquad
+\uvec=\uvec(\xvec,t),\qquad
+p=p(\xvec,t)
+\quad}
+\]
+
+\vspace{.16cm}
+\begin{tabular}{m{.47\textwidth}m{.47\textwidth}}
+\small
+\btri\ microscopic:
+\[
+\text{molecules}\quad\graytxt{\longrightarrow}\quad\red{\text{fluctuation}}
+\]
+\btri\ local average:
+\[
+\Delta\vol \longrightarrow \cyan{\rev}
+\]
+\btri\ macroscopic:
+\[
+\rho,\ \uvec,\ p\quad\graytxt{\longrightarrow}\quad\olive{\text{smooth fields}}
+\]
+&
 \centering
-\begin{tikzpicture}[scale=.9]
-  \draw[rounded corners, thick] (0,0) rectangle (5,3.2);
-  \foreach \i in {1,...,55}{
-    \pgfmathsetmacro{\x}{0.25+4.5*rnd}
-    \pgfmathsetmacro{\y}{0.25+2.7*rnd}
-    \fill[black!45] (\x,\y) circle (0.028);
+\begin{tikzpicture}[scale=.68]
+  \draw[thick] (0,0) rectangle (4.9,3.1);
+  \foreach \i in {1,...,70}{
+    \pgfmathsetmacro{\x}{.25+4.35*rnd}
+    \pgfmathsetmacro{\y}{.25+2.55*rnd}
+    \fill[black!45] (\x,\y) circle (.024);
   }
-  \draw[thick, fill=gray!8] (2.5,1.6) circle (.75);
-  \node at (2.5,1.6) {\small 平均体积};
-  \draw[-{Latex[length=2mm]}, thick] (3.25,1.6) -- (4.65,2.35);
-  \node[align=center] at (4.55,2.65) {\small 连续场值\\[-1mm]\small $\rho,\uvec,p$};
-  \node[anchor=west] at (0.05,-.35) {\small 分子尺度};
-  \node[anchor=east] at (5,-.35) {\small 工程尺度};
+  \draw[thick,teal,fill=cyan!8] (2.4,1.5) circle (.7);
+  \node[teal] at (2.4,1.5) {\scriptsize $\rev$};
+  \draw[-{Latex[length=2mm]},thick,cyan] (3.05,1.85) -- (4.25,2.65);
+  \node[teal] at (4.05,2.92) {\scriptsize field value};
 \end{tikzpicture}
-\end{column}
-\end{columns}
+\end{tabular}
+
+\vspace{.14cm}
+\olive{\scriptsize key: average over enough molecules, but keep the volume small compared with the flow scale.}
 \end{frame}
 
-\begin{frame}{流体质点：不是分子，也不是整个流场}
-\greybox{
-\[
-\text{分子尺度} \ll \text{流体质点尺度} \ll \text{流动特征尺度}
-\]
-}
-\vspace{.3cm}
-\begin{columns}[T]
-\begin{column}{.48\textwidth}
-\begin{itemize}
-\item 足够大：包含大量分子，平均量稳定。
-\item 足够小：相对于流动长度尺度可视为一个点。
-\item 可以随流体运动，并携带局部物理量。
-\end{itemize}
-\end{column}
-\begin{column}{.48\textwidth}
-\begin{tikzpicture}[scale=.86]
-  \draw[-{Latex[length=2mm]}, thick] (0,0) -- (6.6,0);
-  \foreach \x/\lab in {0.6/分子,3.2/流体质点,6.0/结构或管道}{
-    \draw[thick] (\x,-.08) -- (\x,.08);
-    \node[below] at (\x,-.08) {\small \lab};
-  }
-  \draw[decorate,decoration={brace,amplitude=5pt}] (.55,.35) -- (3.2,.35)
-    node[midway,above=6pt] {\scriptsize 平均足够稳定};
-  \draw[decorate,decoration={brace,amplitude=5pt}] (3.2,.85) -- (6.0,.85)
-    node[midway,above=6pt] {\scriptsize 仍可视为局部点};
-\end{tikzpicture}
-\end{column}
-\end{columns}
-\end{frame}
+\subsection{representative volume}
 
-\begin{frame}{连续性假设的判据：Knudsen 数}
-\greybox{
+\begin{frame}[label=rev]{fluid particle: not a molecule, not the whole flow}
 \[
-\Kn=\frac{\lambda}{L}
+\text{molecular scale}
+\quad \ll \quad
+\alert{\text{fluid particle scale}}
+\quad \ll \quad
+\text{flow length scale}
 \]
-}
-\begin{itemize}
-\widesep
-\item $\lambda$：分子平均自由程，描述分子碰撞前的典型运动距离。
-\item $L$：流动或几何特征尺度，例如管径、边界层厚度、建筑尺寸。
-\item $\Kn \ll 1$ 时，分子尺度远小于工程尺度，连续介质模型通常可靠。
-\end{itemize}
+
+\vspace{.18cm}
+\begin{tabular}{m{.47\textwidth}m{.47\textwidth}}
+\small
+\btri\ many molecules: stable average
+
+\vspace{.12cm}
+\btri\ small volume: local point
+
+\vspace{.12cm}
+\btri\ moves with local variables
+&
+\centering
+\begin{tikzpicture}[scale=.78]
+  \draw[-{Latex[length=2mm]},thick] (0,0) -- (6.2,0);
+  \foreach \x/\lab in {.55/molecule,3.1/fluid particle,5.65/flow scale}{
+    \draw[thick] (\x,-.09) -- (\x,.09);
+    \node[below] at (\x,-.1) {\scriptsize \lab};
+  }
+  \draw[decorate,decoration={brace,amplitude=5pt},cyan] (.55,.45) -- (3.1,.45);
+  \node[cyan] at (1.8,.82) {\scriptsize statistics OK};
+  \draw[decorate,decoration={brace,amplitude=5pt},olive] (3.1,1.02) -- (5.65,1.02);
+  \node[olive] at (4.4,1.38) {\scriptsize local point};
+\end{tikzpicture}
+\end{tabular}
+
 \vspace{.2cm}
+\[
+\rho(\xvec,t)=
+\lim_{\Delta \vol\rightarrow\rev}
+\frac{\Delta m}{\Delta \vol},
+\qquad
+\red{\rev \neq 0\ \text{physically}}
+\]
+\end{frame}
+
+\subsection{Knudsen number}
+
+\begin{frame}[label=kn]{$\Kn=\lambda/L$: criterion for continuum}
+\[
+\boxed{\displaystyle
+\Kn=\frac{\cyan{\lambda}}{\purple{L}}
+}
+\qquad
+\begin{array}{ll}
+\cyan{\lambda}: & \text{molecular mean free path}\\[2pt]
+\purple{L}: & \text{flow/geometric length scale}
+\end{array}
+\]
+
+\vspace{.15cm}
 \begin{center}
+\small
 \begin{tabular}{lll}
 \toprule
-范围 & 常见描述 & 建模方式 \\
+range & description & model idea \\
 \midrule
-$\Kn < 10^{-3}$ & 连续流 & NS 方程通常适用 \\
-$10^{-3}\sim10^{-1}$ & 滑移/过渡影响出现 & 边界条件需谨慎 \\
-$\Kn > 10^{-1}$ & 稀薄效应明显 & 连续介质假设可能失效 \\
+$\Kn<10^{-3}$ & continuum & Navier--Stokes usually OK \\
+$10^{-3}\sim10^{-1}$ & slip/transition & boundary condition matters \\
+$\Kn>10^{-1}$ & rarefied & continuum may fail \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+\vspace{.16cm}
+\small
+\btri\ continuum is not ``molecules disappear''; it is a controlled averaging.
 \end{frame}
 
-\begin{frame}{土木工程尺度下通常很安全}
-\begin{columns}[T]
-\begin{column}{.48\textwidth}
-\begin{itemize}
-\widesep
-\item 常温常压空气的分子平均自由程约为几十纳米量级。
-\item 水中分子间尺度更小，常规水力问题更接近连续介质。
-\item 管径、建筑尺度、河道尺度通常远大于分子尺度。
-\end{itemize}
-\end{column}
-\begin{column}{.48\textwidth}
+\begin{frame}{civil engineering scales: usually safe}
+\begin{tabular}{m{.44\textwidth}m{.50\textwidth}}
+\small
+\btri\ air at standard condition:
+\[
+\lambda\sim 10^{-8}\ \mathrm{m}
+\]
+\btri\ pipes, buildings, rivers:
+\[
+L\gg\lambda
+\]
+\btri\ micro gas flow: check $\Kn$
+&
+\centering
+\small
 \begin{tabular}{lll}
 \toprule
-问题 & 取 $L$ & 量级判断 \\
+case & $L$ & $\Kn$ \\
 \midrule
-建筑绕流 & \SI{10}{m} & $\Kn \sim 10^{-8}$ \\
-通风管道 & \SI{0.1}{m} & $\Kn \sim 10^{-6}$ \\
-微通道空气流 & \SI{1}{\micro m} & $\Kn \sim 10^{-2}$ \\
+building wind & $10\ \mathrm{m}$ & $\sim 10^{-8}$\\
+ventilation duct & $0.1\ \mathrm{m}$ & $\sim 10^{-6}$\\
+micro-channel gas & $1\ \mu\mathrm{m}$ & $\sim 10^{-2}$\\
 \bottomrule
 \end{tabular}
-\vspace{.55cm}
+\end{tabular}
 
-\greybox[.92\textwidth]{
-\centering
-常规土木流动：连续性假设通常成立。\\
-微尺度、低压、稀薄气体：需要重新判断。
-}
-\end{column}
-\end{columns}
+\vspace{.32cm}
+\[
+\underbrace{\lambda \ll L}_{\text{\cyan{scale separation}}}
+\quad \Longrightarrow \quad
+\underbrace{\rho,\ \uvec,\ p\ \text{are fields}}_{\text{\olive{continuum model}}}
+\]
 \end{frame}
 
-\begin{frame}{连续介质下，流动被描述为“场”}
-\begin{columns}[T]
-\begin{column}{.48\textwidth}
-\greybox{
+\section{fluid variables}
+\subsection{density}
+
+\begin{frame}[label=density]{density: local average}
 \[
-\rho=\rho(\xvec,t),\qquad \uvec=\uvec(\xvec,t),\qquad p=p(\xvec,t)
+\rho(\xvec,t)=
+\lim_{\Delta \vol\rightarrow\rev}
+\frac{\Delta m}{\Delta \vol}
+\qquad
+\begin{array}{rcl}
+\Delta \vol \ \text{too small} &\Rightarrow& \red{\text{fluctuation}}\\
+\Delta \vol \ \text{too large} &\Rightarrow& \red{\text{smearing}}\\
+\Delta \vol \rightarrow \rev &\Rightarrow& \cyan{\text{stable local value}}
+\end{array}
 \]
-}
-\begin{itemize}
-\item $\rho$：密度场
-\item $\uvec=(u,v,w)$：速度场
-\item $p$：压力场
-\item $T,\mu,\tau$ 等量也可写为场
-\end{itemize}
-\end{column}
-\begin{column}{.48\textwidth}
+
+\vspace{.1cm}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,scale=.78]
+  \draw[-{Latex[length=2mm]}] (0,0) -- (7,0) node[right] {\scriptsize $\Delta \vol$};
+  \draw[-{Latex[length=2mm]}] (0,0) -- (0,2.7) node[above] {\scriptsize $\Delta m/\Delta\vol$};
+  \draw[fill=cyan!8,draw=none] (1.75,0) rectangle (4.2,2.55);
+  \draw[thick,smooth] plot coordinates{(.2,2.0)(.5,.65)(.8,2.1)(1.2,.85)(1.6,1.45)(2.15,1.42)(3.0,1.43)(4.0,1.42)(5.0,1.28)(6.4,1.02)};
+  \node[teal] at (2.95,2.28) {\scriptsize continuum window};
+  \node[red] at (.75,2.45) {\scriptsize molecular noise};
+  \node[olive] at (5.45,1.65) {\scriptsize over-average};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\subsection{velocity}
+
+\begin{frame}[label=velocity]{velocity field: components and local value}
+\[
+\uvec(\xvec,t)
+=u(\xvec,t)\vec e_1+v(\xvec,t)\vec e_2+w(\xvec,t)\vec e_3
+\]
+
+\begin{tabular}{m{.43\textwidth}m{.51\textwidth}}
+\small
+\btri\ vector value at every point:
+\[
+\xvec=(x_1,x_2,x_3)
+\]
+\btri\ acceleration is not only $\partial\uvec/\partial t$
+\[
+\frac{\Dt\uvec}{\Dt t}
+=\frac{\partial\uvec}{\partial t}
++(\uvec\cdot\grad)\uvec
+\]
+&
 \centering
-\begin{tikzpicture}[scale=.82]
-  \draw[step=1, gray!20, very thin] (0,0) grid (5,3);
-  \foreach \x in {.6,1.6,2.6,3.6,4.6}{
-    \foreach \y in {.55,1.55,2.55}{
-      \pgfmathsetmacro{\ang}{15+18*\x-9*\y}
-      \draw[-{Latex[length=1.5mm]}, thick] (\x,\y) -- ++(\ang:.38);
+\begin{tikzpicture}[scale=.74]
+  \draw[step=1,gray!25,very thin] (0,0) grid (5,3);
+  \foreach \x in {.55,1.55,2.55,3.55,4.55}{
+    \foreach \y in {.5,1.5,2.5}{
+      \pgfmathsetmacro{\ang}{10+18*\x-9*\y}
+      \draw[-{Latex[length=1.6mm]},thick] (\x,\y) -- ++(\ang:.36);
     }
   }
-  \node[anchor=west] at (.2,3.35) {\small $\uvec(\xvec,t)$};
-  \fill[black] (2.6,1.55) circle (.04);
-  \node[anchor=west] at (2.75,1.55) {\small 局部场值};
+  \node[anchor=west] at (.2,3.35) {$\uvec(\xvec,t)$};
+  \fill[red] (2.55,1.5) circle (.045);
+  \node[anchor=west] at (2.75,1.5) {\scriptsize local value};
 \end{tikzpicture}
-\end{column}
-\end{columns}
+\end{tabular}
 \end{frame}
 
-\begin{frame}{密度：一个局部平均量}
-\greybox{
+\begin{frame}{Eulerian vs. Lagrangian}
 \[
-\rho(\xvec,t)=\lim_{\Delta V\rightarrow \delta V}
-\frac{\Delta m}{\Delta V}
+\begin{array}{rclcl}
+\text{\alert{Eulerian}} &:&
+\uvec &=& \uvec(\xvec,t)
+\qquad \text{\small fixed point in space}\\[4pt]
+\text{\cyan{Lagrangian}} &:&
+\xvec &=& \xvec(\xvec_0,t)
+\qquad \text{\small follow a fluid particle}
+\end{array}
 \]
-}
-\begin{itemize}
-\widesep
-\item 这里的 $\delta V$ 不是数学上的零体积，而是连续介质意义下的最小平均体积。
-\item 若 $\Delta V$ 太小，分子涨落显著，密度不稳定。
-\item 若 $\Delta V$ 太大，平均会抹掉真实的空间变化。
-\end{itemize}
-\begin{center}
-\begin{tikzpicture}[x=1cm,y=1cm]
-  \draw[-{Latex[length=2mm]}] (0,0) -- (7,0) node[right] {\small 平均体积 $\Delta V$};
-  \draw[-{Latex[length=2mm]}] (0,0) -- (0,2.6) node[above] {\small $\Delta m/\Delta V$};
-  \draw[thick, smooth] plot coordinates {(0.25,1.95) (.55,.7) (.85,2.15) (1.15,.9) (1.45,1.5) (1.9,1.42) (2.4,1.43) (3.3,1.43) (4.2,1.38) (5.1,1.25) (6.3,1.05)};
-  \draw[fill=gray!10,draw=none] (1.75,0) rectangle (4.1,2.5);
-  \node at (2.95,2.25) {\small 连续介质窗口};
-\end{tikzpicture}
-\end{center}
-\end{frame}
 
-\begin{frame}{速度场：Euler 描述与 Lagrange 描述}
-\begin{columns}[T]
-\begin{column}{.49\textwidth}
-\textbf{Euler 描述}
-\[
-\uvec=\uvec(\xvec,t)
-\]
+\vspace{.16cm}
+\begin{tabular}{m{.45\textwidth}m{.45\textwidth}}
+\textcolor{red}{Eulerian}
 \begin{itemize}
-\item 固定空间位置，看流体经过。
-\item 适合写控制方程和边界条件。
-\item CFD 和实验测量常采用这种视角。
+\item control equations
+\item boundary conditions
+\item CFD / PIV / probes
 \end{itemize}
-\end{column}
-\begin{column}{.49\textwidth}
-\textbf{Lagrange 描述}
-\[
-\xvec=\xvec(\xvec_0,t)
-\]
+&
+\textcolor{cyan}{Lagrangian}
 \begin{itemize}
-\item 跟随某个流体质点运动。
-\item 适合理解质点轨迹和物质导数。
-\item 颗粒追踪、示踪实验常采用这种视角。
+\item particle trajectory
+\item material derivative
+\item tracer particles
 \end{itemize}
-\end{column}
-\end{columns}
-\vspace{.25cm}
-\greybox{
+\end{tabular}
+
+\vspace{.05cm}
 \[
+\boxed{\displaystyle
 \frac{\Dt(\cdot)}{\Dt t}
-=\frac{\partial(\cdot)}{\partial t}+\uvec\cdot\grad(\cdot)
+=
+\underbrace{\frac{\partial(\cdot)}{\partial t}}_{\cyan{\text{local}}}
++
+\underbrace{\uvec\cdot\grad(\cdot)}_{\olive{\text{convective}}}}
 \]
-}
 \end{frame}
 
-\begin{frame}{不可压缩：不是“压力不能变”}
-\begin{itemize}
-\widesep
-\item 不可压缩的核心是流体质点密度不随运动显著变化：
+\subsection{pressure}
+
+\begin{frame}[label=pressure]{pressure: normal force per unit area}
 \[
+p=\lim_{\Delta A\rightarrow 0}
+\frac{\Delta F_n}{\Delta A}
+\qquad
+\red{\text{force}}\ \perp\ \cyan{\text{surface}}
+\]
+
+\begin{tabular}{m{.45\textwidth}m{.48\textwidth}}
+\small
+\btri\ hydrostatics: same pressure in all directions
+
+\vspace{.13cm}
+\btri\ moving flow: pressure + viscous stresses
+
+\vspace{.13cm}
+\btri\ wind load, pipe flow, outlet jet
+&
+\centering
+\begin{tikzpicture}[scale=.72]
+  \draw[thick,fill=gray!8] (0,0) rectangle (4.3,2.75);
+  \draw[thick] (2.15,1.38) circle (.42);
+  \foreach \a in {0,45,...,315}{
+    \draw[-{Latex[length=1.6mm]},thick,blue!70!black] ($(2.15,1.38)+(\a:.9)$) -- ($(2.15,1.38)+(\a:.5)$);
+  }
+  \node at (2.15,1.38) {\scriptsize point};
+  \node at (2.15,-.38) {\scriptsize isotropic pressure at rest};
+\end{tikzpicture}
+\end{tabular}
+\end{frame}
+
+\subsection{viscosity}
+
+\begin{frame}[label=viscosity]{viscosity: velocity gradient produces shear}
+\[
+\tau=\mu\frac{\dd u}{\dd y}
+\qquad
+\begin{array}{rcl}
+\mu &:& \text{dynamic viscosity}\\[2pt]
+\dd u/\dd y &:& \text{shear rate}\\[2pt]
+\tau &:& \text{viscous shear stress}
+\end{array}
+\]
+
+\begin{tabular}{m{.43\textwidth}m{.50\textwidth}}
+\small
+\btri\ no velocity gradient: no Newtonian shear
+
+\vspace{.13cm}
+\btri\ viscosity creates boundary layers
+
+\vspace{.13cm}
+\btri\ pipe friction and wake dissipation
+&
+\centering
+\begin{tikzpicture}[scale=.76]
+  \draw[very thick] (0,0) -- (4.6,0);
+  \draw[very thick] (0,2.45) -- (4.6,2.45);
+  \draw[-{Latex[length=2mm]},thick,red] (.35,2.72) -- (1.7,2.72) node[midway,above] {\scriptsize $U$};
+  \foreach \y/\len in {.35/.55,.8/1.0,1.25/1.45,1.7/1.9,2.15/2.35}{
+    \draw[-{Latex[length=1.6mm]},thick] (.55,\y) -- ++(\len,0);
+  }
+  \draw[-{Latex[length=1.8mm]},cyan] (4.95,0) -- (4.95,2.45) node[midway,right] {\scriptsize $y$};
+  \node at (2.25,-.33) {\scriptsize wall: $u=0$};
+\end{tikzpicture}
+\end{tabular}
+\end{frame}
+
+\section{descriptions and equations}
+\subsection{material derivative}
+
+\begin{frame}[label=material]{material derivative}
+\[
+\frac{\Dt \phi}{\Dt t}
+=
+\underbrace{\frac{\partial \phi}{\partial t}}_{\cyan{\text{unsteady at fixed point}}}
++
+\underbrace{\uvec\cdot\grad\phi}_{\olive{\text{change due to motion}}}
+\]
+
+\vspace{.1cm}
+\[
+\text{for velocity:}\qquad
+\frac{\Dt \uvec}{\Dt t}
+=
+\frac{\partial \uvec}{\partial t}
++u\frac{\partial\uvec}{\partial x}
++v\frac{\partial\uvec}{\partial y}
++w\frac{\partial\uvec}{\partial z}
+\]
+
+\vspace{.12cm}
+\small
+\btri\ this is the bridge between Lagrangian thinking and Eulerian equations
+
+\vspace{.1cm}
+\btri\ the nonlinear term appears because a particle moves through spatial gradients
+\end{frame}
+
+\subsection{incompressibility}
+
+\begin{frame}[label=incompressible]{incompressible: not ``pressure cannot change''}
+\[
+\text{incompressible}
+\quad \Longleftrightarrow \quad
 \frac{\Dt \rho}{\Dt t}=0
 \]
-\item 结合质量守恒，可得到常用条件：
+
+\vspace{.08cm}
 \[
-\grad\cdot\uvec=0
+\frac{\Dt \rho}{\Dt t}
+=
+\frac{\partial \rho}{\partial t}
++\uvec\cdot\grad\rho,
+\qquad
+\text{mass conservation gives}
+\qquad
+\boxed{\grad\cdot\uvec=0}
 \]
-\item 液体常常可近似不可压缩；低速气体在 $\Ma<0.3$ 时也常作不可压缩处理。
-\end{itemize}
-\greybox{
-不可压缩流中，压力仍然可以在空间中变化；压力常用于保证速度场满足质量守恒。
-}
+
+\vspace{.18cm}
+\small
+\btri\ liquids: often incompressible
+
+\vspace{.11cm}
+\btri\ low-speed gases: often incompressible when $\Ma<0.3$
+
+\vspace{.11cm}
+\btri\ pressure still varies; it enforces the velocity constraint
 \end{frame}
 
-\begin{frame}{压力：单位面积上的法向作用}
-\begin{columns}[T]
-\begin{column}{.48\textwidth}
-\greybox{
+\subsection{boundary conditions}
+
+\begin{frame}[label=noslip]{boundary condition: no slip}
 \[
-p=\lim_{\Delta A\rightarrow 0}\frac{\Delta F_n}{\Delta A}
+\boxed{\uvec_{\text{fluid at wall}}=\uvec_{\text{wall}}}
 \]
-}
-\begin{itemize}
-\item 静止流体中，压力在一点处各方向相同。
-\item 运动流体中，还会出现黏性剪切应力。
-\item 管道、建筑表面风压、孔口出流都离不开压力分布。
-\end{itemize}
-\end{column}
-\begin{column}{.48\textwidth}
+
+\vspace{.12cm}
+\begin{tabular}{m{.43\textwidth}m{.50\textwidth}}
+\small
+\btri\ stationary wall:
+\[
+\uvec=0
+\]
+\btri\ moving wall:
+\[
+\uvec=\uvec_{\mathrm{wall}}
+\]
+\btri\ may fail for rarefied / micro-scale gas flows
+&
 \centering
-\begin{tikzpicture}[scale=.9]
-  \draw[thick, fill=gray!8] (0,0) rectangle (4,2.5);
-  \draw[thick] (2,1.25) circle (.45);
-  \foreach \a in {0,45,...,315}{
-    \draw[-{Latex[length=1.6mm]}, thick] ($(2,1.25)+(\a:.9)$) -- ($(2,1.25)+(\a:.5)$);
+\begin{tikzpicture}[scale=.8]
+  \draw[very thick] (0,0) -- (5.1,0);
+  \foreach \x in {.55,1.25,1.95,2.65,3.35,4.05}{
+    \draw[-{Latex[length=1.5mm]},thick,blue!70!black] (\x,.2) -- ++(.55,.35);
   }
-  \node at (2,1.25) {\small 点};
-  \node at (2,-.45) {\small 静止流体：各向压力相同};
+  \node[below] at (2.5,0) {\scriptsize solid wall};
+  \draw[red,decorate,decoration={brace,amplitude=5pt}] (.3,.72) -- (4.8,.72);
+  \node[red] at (2.55,1.08) {\scriptsize velocity grows away from wall};
 \end{tikzpicture}
-\end{column}
-\end{columns}
+\end{tabular}
 \end{frame}
 
-\begin{frame}{黏性：速度梯度产生剪切应力}
-\begin{columns}[T]
-\begin{column}{.48\textwidth}
-\greybox{
+\section{limits and practice}
+\subsection{continuum failure}
+
+\begin{frame}[label=failure]{when continuum fails}
+\begin{tabular}{m{.47\textwidth}m{.46\textwidth}}
+\small
+\btri\ high-altitude rarefied gas
+
+\vspace{.14cm}
+\btri\ micro / nano channels
+
+\vspace{.14cm}
+\btri\ strong non-equilibrium near shocks
+
+\vspace{.14cm}
+\btri\ molecular-scale evaporation / condensation
+&
 \[
-\tau=\mu \frac{\dd u}{\dd y}
+\Kn=\frac{\lambda}{L}
+\quad
+\begin{cases}
+\ll 1, & \text{continuum}\\
+\sim 1, & \text{kinetic effects}
+\end{cases}
 \]
-}
-\begin{itemize}
-\widesep
-\item $\mu$ 是动力黏度。
-\item 牛顿流体中，剪切应力与剪切速率成正比。
-\item 黏性是边界层、管道摩阻、尾流耗散的根源。
-\end{itemize}
-\end{column}
-\begin{column}{.48\textwidth}
-\centering
-\begin{tikzpicture}[scale=.9]
-  \draw[very thick] (0,0) -- (4.6,0);
-  \draw[very thick] (0,2.4) -- (4.6,2.4);
-  \draw[-{Latex[length=2mm]}, thick] (.3,2.65) -- (1.5,2.65) node[midway,above] {\small $U$};
-  \foreach \y/\len in {.35/.55,.8/1.0,1.25/1.45,1.7/1.9,2.15/2.35}{
-    \draw[-{Latex[length=1.6mm]}, thick] (.55,\y) -- ++(\len,0);
-  }
-  \draw[-{Latex[length=1.8mm]}] (4.95,0) -- (4.95,2.4) node[midway,right] {\small $y$};
-  \node at (2.3,-.35) {\small 固壁：$u=0$};
-  \node at (2.35,2.95) {\small 移动板：$u=U$};
-\end{tikzpicture}
-\end{column}
-\end{columns}
-\end{frame}
+\end{tabular}
 
-\begin{frame}{牛顿流体与非牛顿流体}
-\begin{columns}[T]
-\begin{column}{.48\textwidth}
-\begin{itemize}
-\widesep
-\item 水、空气通常可按牛顿流体处理。
-\item 泥浆、聚合物溶液、浆体可能表现为非牛顿流体。
-\item 本课程主线主要基于牛顿流体。
-\end{itemize}
-\end{column}
-\begin{column}{.48\textwidth}
-\centering
-\begin{tikzpicture}[scale=.9]
-  \draw[-{Latex[length=2mm]}] (0,0) -- (4.6,0) node[right] {\small $\dd u/\dd y$};
-  \draw[-{Latex[length=2mm]}] (0,0) -- (0,3) node[above] {\small $\tau$};
-  \draw[thick] (0,0) -- (4,2.5) node[right] {\small 牛顿流体};
-  \draw[thick, dashed] plot[smooth] coordinates {(0,0) (.8,.25) (1.7,.75) (2.8,1.65) (4,2.85)}
-    node[right] {\small 剪切增稠};
-  \draw[thick, dotted] plot[smooth] coordinates {(0,0) (.7,.85) (1.6,1.45) (2.8,2.0) (4,2.35)}
-    node[right] {\small 剪切变稀};
-\end{tikzpicture}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{无滑移边界条件}
-\greybox{
+\vspace{.23cm}
 \[
-\uvec_{\text{fluid at wall}}=\uvec_{\text{wall}}
+\text{failure}
+\quad \neq \quad
+\text{bad equation}
+\qquad
+\text{failure}
+\quad = \quad
+\text{bad local average}
 \]
-}
-\begin{itemize}
-\widesep
-\item 固体壁面处，流体速度与壁面速度相同。
-\item 对静止壁面：壁面上的流体速度为零。
-\item 管道压降、边界层生成、壁面剪切力都从无滑移开始。
-\item 在稀薄气体或微尺度流动中，无滑移可能需要修正为滑移边界。
-\end{itemize}
 \end{frame}
 
-\begin{frame}{连续性假设失效的典型场景}
-\begin{columns}[T]
-\begin{column}{.5\textwidth}
-\begin{itemize}
-\widesep
-\item 高空低压稀薄气体。
-\item 微/纳米通道内的气体流动。
-\item 激波附近的强非平衡区域。
-\item 分子尺度界面、蒸发/凝结前沿。
-\end{itemize}
-\end{column}
-\begin{column}{.45\textwidth}
-\greybox{
-\centering
-失效的本质不是“公式不好用”，\\[1mm]
-而是局部平均不再能代表平滑场。
-}
-\vspace{.45cm}
-\begin{tikzpicture}[scale=.85]
-  \draw[-{Latex[length=2mm]}, thick] (0,0) -- (5,0);
-  \node[below] at (0,0) {\small 分子};
-  \node[below] at (2.5,0) {\small 过渡};
-  \node[below] at (5,0) {\small 连续};
-  \draw[very thick] (.2,.45) -- (1.3,.45);
-  \draw[very thick] (1.6,.45) -- (3.1,.45);
-  \draw[very thick] (3.4,.45) -- (4.8,.45);
-  \node[above] at (.75,.45) {\small 大 $\Kn$};
-  \node[above] at (4.1,.45) {\small 小 $\Kn$};
-\end{tikzpicture}
-\end{column}
-\end{columns}
-\end{frame}
+\subsection{estimation}
 
-\begin{frame}{课堂练习：判断连续性假设}
-取常温常压空气的平均自由程 $\lambda\approx \SI{65}{nm}$，估算下列情形的 $\Kn=\lambda/L$。
+\begin{frame}[label=practice]{practice: estimate $\Kn$}
+\[
+\lambda_{\text{air}}\approx 65\ \mathrm{nm},
+\qquad
+\Kn=\frac{\lambda}{L}
+\]
 
-\vspace{.25cm}
+\vspace{.14cm}
 \begin{center}
+\small
 \begin{tabular}{llll}
 \toprule
-情形 & 特征尺度 $L$ & $\Kn$ 量级 & 判断 \\
+case & length $L$ & $\Kn$ scale & judgment\\
 \midrule
-建筑绕流 & \SI{10}{m} & \phantom{$10^{-8}$} & \phantom{连续} \\
-通风支管 & \SI{0.1}{m} & \phantom{$10^{-6}$} & \phantom{连续} \\
-微通道气体流 & \SI{1}{\micro m} & \phantom{$10^{-2}$} & \phantom{需谨慎} \\
+building wind & $10\ \mathrm{m}$ & \phantom{$10^{-8}$} & \phantom{continuum}\\
+ventilation duct & $0.1\ \mathrm{m}$ & \phantom{$10^{-6}$} & \phantom{continuum}\\
+micro-channel gas & $1\ \mu\mathrm{m}$ & \phantom{$10^{-2}$} & \phantom{check slip}\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\vspace{.3cm}
-\greybox{
-思考：为什么同样是空气，建筑绕流可以放心使用连续介质模型，而微通道流动需要谨慎？
-}
+\vspace{.2cm}
+\olive{\small question: why can the same air be continuum in buildings but questionable in micro-channels?}
 \end{frame}
 
-\begin{frame}{本讲小结}
-\begin{itemize}
-\widesep
-\item 连续性假设把离散分子系统转化为连续场问题，是后续方程推导的前提。
-\item 流体质点满足尺度分离：比分子大得多，比工程尺度小得多。
-\item Knudsen 数 $\Kn=\lambda/L$ 是判断连续性假设的重要量纲一参数。
-\item 连续介质下，流动可由 $\rho(\xvec,t)$、$\uvec(\xvec,t)$、$p(\xvec,t)$ 等场变量描述。
-\item 黏性、压力、无滑移边界条件将直接引出 NS 方程、管道流和边界层。
-\end{itemize}
-\end{frame}
+\begin{frame}{summary}
+\small
+\btri\ continuum assumption converts molecular systems into field problems
 
-\begin{frame}{课后任务}
-\begin{enumerate}
-\widesep
-\item 复习本讲的三个核心概念：流体质点、Knudsen 数、场变量。
-\item 选一个土木工程中的流动问题，写出合理的特征尺度 $L$，并判断连续性假设是否成立。
-\item 预习：控制体、质量守恒、连续性方程。
-\end{enumerate}
+\vspace{.16cm}
+\btri\ fluid particle requires scale separation:
+\[
+\text{molecule} \ll \text{fluid particle} \ll \text{flow scale}
+\]
+
+\vspace{.16cm}
+\btri\ $\Kn=\lambda/L$ is the central criterion
+
+\vspace{.16cm}
+\btri\ variables become fields:
+\[
+\rho(\xvec,t),\quad \uvec(\xvec,t),\quad p(\xvec,t)
+\]
+
+\vspace{.16cm}
+\btri\ next: control volume, mass conservation, continuity equation
 \end{frame}
 
 \end{document}
